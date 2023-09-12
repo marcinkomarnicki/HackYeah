@@ -1,5 +1,5 @@
 ﻿using HackYeah.DAL.Models;
-using HackYeah.Infrastructure.Configuration;
+using HackYeah.Infrastructure.Configurations;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -10,7 +10,8 @@ namespace HackYeah.DAL
     {
         private readonly string _connectionString;
 
-        public HackYeahDbContext(IOptions<ConnectionStringsSection> connectionStringsOptions)
+        public HackYeahDbContext(DbContextOptions<HackYeahDbContext> options, IOptions<ConnectionStringsSection> connectionStringsOptions)
+            : base(options)
         {
             _connectionString = connectionStringsOptions.Value.HackYeah;
         }
@@ -19,7 +20,8 @@ namespace HackYeah.DAL
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseNpgsql(_connectionString);
+            optionsBuilder.UseNpgsql(_connectionString)
+                .UseSnakeCaseNamingConvention();
         }
     }
 }

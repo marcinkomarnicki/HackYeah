@@ -12,16 +12,16 @@ namespace HackYeah.DAL.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Demos",
+                name: "demos",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
+                    id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Value = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false)
+                    value = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Demos", x => x.Id);
+                    table.PrimaryKey("pk_demos", x => x.id);
                 });
         }
 
@@ -29,7 +29,7 @@ namespace HackYeah.DAL.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Demos");
+                name: "demos");
         }
     }
 }

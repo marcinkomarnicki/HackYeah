@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HackYeah.Api.API.Controllers
@@ -18,6 +19,7 @@ namespace HackYeah.Api.API.Controllers
             _logger = logger;
         }
 
+        [Authorize]
         [HttpGet(Name = "GetWeatherForecast")]
         public IEnumerable<WeatherForecast> Get()
         {

@@ -1,5 +1,6 @@
 ﻿using HackYeah.Application.Commands;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HackYeah.API.Controllers
@@ -15,6 +16,7 @@ namespace HackYeah.API.Controllers
             _mediator = mediator;
         }
 
+        //[Authorize]
         [HttpPut]
         public async Task<IActionResult> Edit(int id, AddRenaultCommand car)
         {
