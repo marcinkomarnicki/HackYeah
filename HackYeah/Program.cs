@@ -86,6 +86,7 @@ builder.Services.AddAuthentication(opt =>
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.TryAddScoped<CurrentUserProvider>();
+builder.Services.AddScoped<HackYeahDbConnection>();
 
 var app = builder.Build();
 
