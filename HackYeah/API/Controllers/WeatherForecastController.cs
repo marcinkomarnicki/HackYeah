@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace HackYeah.Api.API.Controllers
+namespace HackYeah.API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
