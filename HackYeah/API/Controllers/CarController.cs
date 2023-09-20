@@ -24,7 +24,7 @@ namespace HackYeah.API.Controllers
 
             await _mediator.Send(car);
 
-            return Ok();
+            return Ok("test");
         }
     }
 }
