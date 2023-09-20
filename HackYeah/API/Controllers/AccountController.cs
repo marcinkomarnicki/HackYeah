@@ -29,5 +29,12 @@ namespace HackYeah.API.Controllers
         {
             return Ok(await _mediator.Send(model));
         }
+
+        [HttpPost]
+        [Route("Test")]
+        public async Task<IActionResult> Test(string test)
+        {
+            return Ok(test);
+        }
     }
 }
