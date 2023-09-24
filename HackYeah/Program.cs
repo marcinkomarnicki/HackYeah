@@ -9,6 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 using System.Text;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -100,6 +101,26 @@ builder.Services.TryAddScoped<CurrentUserProvider>();
 builder.Services.AddScoped<HackYeahDbConnection>();
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var logger = services.GetRequiredService<ILogger<Program>>();
+
+    try
+    {
+        logger.LogInformation("Database technology initializer - started");
+
+        var dbContext = services.GetRequiredService<HackYeahDbContext>();
+        await dbContext.Database.MigrateAsync();
+
+        logger.LogInformation("Database technology initializer - finished");
+    }
+    catch (Exception ex)
+    {
+        logger.LogError(ex, "An error occurred while migrating the database.");
+    }
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
