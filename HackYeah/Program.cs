@@ -95,6 +95,7 @@ builder.Services.AddAuthentication(opt =>
     };
 });
 
+builder.Services.AddHttpClient();
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.TryAddScoped<CurrentUserProvider>();

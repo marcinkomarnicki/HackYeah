@@ -28,7 +28,6 @@
 
   <ItemGroup>
     <Folder Include="API\Models\" />
-    <Folder Include="Application\Commands\Models\" />
     <Folder Include="Application\Exceptions\" />
     <Folder Include="DAL\Migrations\" />
   </ItemGroup>
