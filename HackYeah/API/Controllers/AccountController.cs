@@ -16,7 +16,7 @@ namespace HackYeah.API.Controllers
 
         [HttpPost]
         [Route("Register")]
-        public async Task<IActionResult> RegisterUser(RegisterUserCommand model)
+        public async Task<IActionResult> RegisterUser([FromBody]RegisterUserCommand model)
         {
             await _mediator.Send(model);
 
@@ -25,7 +25,7 @@ namespace HackYeah.API.Controllers
 
         [HttpPost]
         [Route("Token/Generate")]
-        public async Task<IActionResult> GenerateToken(GetUserTokenQuery model)
+        public async Task<IActionResult> GenerateToken([FromBody]GetUserTokenQuery model)
         {
             return Ok(await _mediator.Send(model));
         }
