@@ -1,39 +1,37 @@
 ﻿using HackYeah.Application.Queries.Models;
-
 using MediatR;
 using HackYeah.DAL;
 using Microsoft.EntityFrameworkCore;
 
 namespace HackYeah.Application.Queries
 {
-    public class GetEncountersQuery : IRequest<List<EncounterResult>>
+    public class GetHistoricalEncounterTypesCountQuery : IRequest<TypeCounterResult>
     {
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
         public decimal MinLatitude { get; set; }
         public decimal MaxLatitude { get; set; }
         public decimal MinLongitude { get; set; }
         public decimal MaxLongitude { get; set; }
         public string EncounterType { get; set; }
-        public bool IsWild { get; set; }
     }
 
-    public class GetEncountersQueryHandler : IRequestHandler<GetEncountersQuery, List<EncounterResult>>
+    public class GetHistoricalEncounterTypesCOuntQueryHandler : IRequestHandler<GetHistoricalEncounterTypesCountQuery, TypeCounterResult>
     {
         private readonly HackYeahDbContext _dbContext;
 
-        public GetEncountersQueryHandler(HackYeahDbContext dbContext)
+        public GetHistoricalEncounterTypesCOuntQueryHandler(HackYeahDbContext dbContext)
         {
             _dbContext = dbContext;
         }
 
-        public async Task<List<EncounterResult>> Handle(GetEncountersQuery request, CancellationToken cancellationToken)
+        public async Task<TypeCounterResult> Handle(GetHistoricalEncounterTypesCountQuery request, CancellationToken cancellationToken)
         {
-            var timeNow = DateTime.Now;
-            var minTime = timeNow.AddHours(-3);
-
             var dataFromDb = _dbContext.Encounters
                 .Where(e => e.EncounterType.Code == request.EncounterType &&
-                            e.TimeUtc > minTime &&
-                            e.IsWild == request.IsWild &&
+                            e.TimeUtc > request.StartDate &&
+                            e.TimeUtc < request.EndDate &&
+                            e.IsWild == true &&
                             e.Latitude < request.MaxLatitude &&
                             e.Latitude > request.MinLatitude &&
                             e.Longitude < request.MaxLongitude &&
@@ -41,15 +39,15 @@ namespace HackYeah.Application.Queries
                 .Include(encounter => encounter.EncounterType)
                 .ToList();
 
-            var result = dataFromDb.Select(e => new EncounterResult()
+            var count = dataFromDb.Count;
+            var lastOccurance = dataFromDb.Select(e => e.TimeUtc).Max();
+
+            var result = new TypeCounterResult()
             {
-                Latitude = e.Latitude,
-                Longitude = e.Longitude,
-                IsWild = e.IsWild,
-                EncounterType = e.EncounterType.Code,
-                TimeUtc = e.TimeUtc,
-                PropabilityOfOccurance = (int)((timeNow - e.TimeUtc).TotalMinutes / 180) * 100
-            }).ToList();
+                EncounterType = request.EncounterType,
+                LastOccurance = lastOccurance,
+                OccuranceCount = count
+            };
 
             return result;
         }

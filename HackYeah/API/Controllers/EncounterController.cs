@@ -30,4 +30,16 @@ public class EncounterController : ControllerBase
     {
         return await _mediator.Send(input);
     }
+
+    [HttpGet]
+    public async Task<List<string>> GetHistoricalEncounterTypes(GetThreeMostOccuranceHistoricalEncounterTypesQuery input)
+    {
+        return await _mediator.Send(input);
+    }
+
+    [HttpGet]
+    public async Task<TypeCounterResult> GetEncounterTypesCount(GetHistoricalEncounterTypesCountQuery input)
+    {
+        return await _mediator.Send(input);
+    }
 }

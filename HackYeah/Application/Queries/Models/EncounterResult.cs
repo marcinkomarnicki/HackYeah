@@ -8,7 +8,7 @@ public class EncounterResult
 
     public decimal Latitude { get; set; }
 
-    public EncounterType EncounterType { get; set; }
+    public string EncounterType { get; set; }
 
     public DateTime TimeUtc { get; set; }
 
