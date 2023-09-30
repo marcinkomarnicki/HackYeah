@@ -31,13 +31,15 @@ public class EncounterController : ControllerBase
         return await _mediator.Send(input);
     }
 
-    [HttpGet]
+    [HttpPost]
+    [Route("/history")]
     public async Task<List<string>> GetHistoricalEncounterTypes(GetThreeMostOccuranceHistoricalEncounterTypesQuery input)
     {
         return await _mediator.Send(input);
     }
 
-    [HttpGet]
+    [HttpPost]
+    [Route("/type-count")]
     public async Task<TypeCounterResult> GetEncounterTypesCount(GetHistoricalEncounterTypesCountQuery input)
     {
         return await _mediator.Send(input);

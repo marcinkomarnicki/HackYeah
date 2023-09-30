@@ -12,6 +12,7 @@ public class GetEncounterTypesResult
 
 public class GetEncounterTypesResultProperties
 {
+    public Guid Id { get; set; }
     public string Name { get; set; }
     public string ValueType { get; set; }
 }

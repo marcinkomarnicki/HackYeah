@@ -9,6 +9,8 @@ public class ReportEncounterCommand : IRequest<Guid>
     public decimal Longitude { get; init; }
     public decimal Latitude { get; init; }
     public Guid EncounterTypeId { get; set; }
+
+    public Dictionary<Guid, string> Properties { get; set; }
 }
 
 public class ReportEncounterCommandHandler : IRequestHandler<ReportEncounterCommand, Guid>
@@ -28,7 +30,12 @@ public class ReportEncounterCommandHandler : IRequestHandler<ReportEncounterComm
             Longitude = request.Longitude,
             EncounterType = null,
             EncounterTypeId = request.EncounterTypeId,
-            TimeUtc = DateTime.UtcNow
+            TimeUtc = DateTime.UtcNow,
+            EncounterProperties = request.Properties.Select(x => new EncounterProperty
+            {
+                EncounterTypePropertyId = x.Key,
+                Value = x.Value
+            }).ToList()
         };
 
         _dbContext.Add(encounter);
