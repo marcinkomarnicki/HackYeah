@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace HackYeah.DAL.Migrations
 {
     [DbContext(typeof(HackYeahDbContext))]
-    [Migration("20230912010914_AddIdentity")]
-    partial class AddIdentity
+    [Migration("20230930175548_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,89 @@ namespace HackYeah.DAL.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("HackYeah.DAL.Models.Demo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("value");
+
+                    b.HasKey("Id")
+                        .HasName("pk_demos");
+
+                    b.ToTable("demos", (string)null);
+                });
+
+            modelBuilder.Entity("HackYeah.DAL.Models.Encounter", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<Guid>("EncounterTypeId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("encounter_type_id");
+
+                    b.Property<decimal>("Latitude")
+                        .HasColumnType("numeric")
+                        .HasColumnName("latitude");
+
+                    b.Property<decimal>("Longitude")
+                        .HasColumnType("numeric")
+                        .HasColumnName("longitude");
+
+                    b.Property<DateTime>("TimeUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("time_utc");
+
+                    b.HasKey("Id")
+                        .HasName("pk_encounters");
+
+                    b.HasIndex("EncounterTypeId")
+                        .HasDatabaseName("ix_encounters_encounter_type_id");
+
+                    b.ToTable("encounters", (string)null);
+                });
+
+            modelBuilder.Entity("HackYeah.DAL.Models.EncounterType", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("code");
+
+                    b.HasKey("Id")
+                        .HasName("pk_encounter_type");
+
+                    b.ToTable("encounter_type", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("d7e923a8-6781-41b0-9929-005d8b0f01d5"),
+                            Code = "Kot"
+                        },
+                        new
+                        {
+                            Id = new Guid("13c2ca92-6a13-482a-8e0e-62bd6682127b"),
+                            Code = "Pies"
+                        });
+                });
 
             modelBuilder.Entity("HackYeah.DAL.Models.User", b =>
                 {
@@ -267,6 +350,18 @@ namespace HackYeah.DAL.Migrations
                         .HasName("pk_asp_net_user_tokens");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("HackYeah.DAL.Models.Encounter", b =>
+                {
+                    b.HasOne("HackYeah.DAL.Models.EncounterType", "EncounterType")
+                        .WithMany()
+                        .HasForeignKey("EncounterTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_encounters_encounter_type_encounter_type_id");
+
+                    b.Navigation("EncounterType");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

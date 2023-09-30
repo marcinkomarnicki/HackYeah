@@ -4,10 +4,12 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace HackYeah.DAL.Migrations
 {
     /// <inheritdoc />
-    public partial class AddIdentity : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -49,6 +51,31 @@ namespace HackYeah.DAL.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("pk_asp_net_users", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "demos",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    value = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_demos", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "encounter_type",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    code = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_encounter_type", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -157,6 +184,36 @@ namespace HackYeah.DAL.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "encounters",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    longitude = table.Column<decimal>(type: "numeric", nullable: false),
+                    latitude = table.Column<decimal>(type: "numeric", nullable: false),
+                    time_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    encounter_type_id = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_encounters", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_encounters_encounter_type_encounter_type_id",
+                        column: x => x.encounter_type_id,
+                        principalTable: "encounter_type",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "encounter_type",
+                columns: new[] { "id", "code" },
+                values: new object[,]
+                {
+                    { new Guid("13c2ca92-6a13-482a-8e0e-62bd6682127b"), "Pies" },
+                    { new Guid("d7e923a8-6781-41b0-9929-005d8b0f01d5"), "Kot" }
+                });
+
             migrationBuilder.CreateIndex(
                 name: "ix_asp_net_role_claims_role_id",
                 table: "AspNetRoleClaims",
@@ -193,6 +250,11 @@ namespace HackYeah.DAL.Migrations
                 table: "AspNetUsers",
                 column: "normalized_user_name",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "ix_encounters_encounter_type_id",
+                table: "encounters",
+                column: "encounter_type_id");
         }
 
         /// <inheritdoc />
@@ -214,10 +276,19 @@ namespace HackYeah.DAL.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "demos");
+
+            migrationBuilder.DropTable(
+                name: "encounters");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "encounter_type");
         }
     }
 }
