@@ -21,7 +21,13 @@ namespace HackYeah.Application.Services
             var dir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
             var modelPath = Path.Combine(dir, "FinalModel.h5");
 
+            var predictPath = Path.Combine(dir, "predict");
+
             _gilState = Py.GIL();
+
+            dynamic os = Py.Import("os");
+            dynamic sys = Py.Import("sys");
+            sys.path.append(os.path.dirname(os.path.expanduser($"{predictPath}.py")));
 
             _script = Py.Import("predict");
             _script.InvokeMethod("loadModel", new PyObject[] { new PyString(modelPath) }); ;
