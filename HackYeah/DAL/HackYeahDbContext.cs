@@ -42,6 +42,9 @@ namespace HackYeah.DAL
                 .WithMany(x => x.EncounterTypes);
 
 
+            // modelBuilder.Entity<PetFile>()
+            //     .HasOne(x => x.MissingPetReport)
+            //     .WithOne().HasForeignKey(y => y);
             /*
             modelBuilder.Entity<EncounterType>()
                 .HasMany(e => e.EncounterTypeProperties)
