@@ -45,7 +45,7 @@ public class EncounterController : ControllerBase
         return await _mediator.Send(input);
     }
 
-    [HttpPost("/encounter-image")]
+    [HttpPut("/encounter-image")]
     public async Task<int>Image([FromForm] ReportImageEncounterCommand input)
     {
         var type = await _mediator.Send(input);

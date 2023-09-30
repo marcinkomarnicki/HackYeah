@@ -14,7 +14,9 @@ namespace HackYeah.Application.Services
         public ImageService(IOptions<PythonSection> options)
         {
             Runtime.PythonDLL = options.Value.DllPath;
+
             PythonEngine.Initialize();
+            PythonEngine.BeginAllowThreads();
 
             var dir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
             var modelPath = Path.Combine(dir, "FinalModel.h5");
