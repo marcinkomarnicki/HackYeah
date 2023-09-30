@@ -20,7 +20,7 @@ namespace HackYeah.Application.Queries
         public decimal MinLongitude { get; set; }
         public decimal MaxLongitude { get; set; }
         public string EncounterType { get; set; }
-        public bool EncounterCategory { get; set; }
+        public bool IsWild { get; set; }
     }
 
     public class GetEncountersQueryHandler : IRequestHandler<GetEncountersQuery, List<EncounterResult>>
@@ -40,7 +40,7 @@ namespace HackYeah.Application.Queries
             var dataFromDb = _dbContext.Encounters
                 .Where(e => e.EncounterType.Code == request.EncounterType &&
                             e.TimeUtc > minTime &&
-                            e.EncounterCategory == request.EncounterCategory &&
+                            e.IsWild == request.IsWild &&
                             e.Latitude < request.MaxLatitude &&
                             e.Latitude > request.MinLatitude &&
                             e.Longitude < request.MaxLongitude &&
@@ -52,7 +52,7 @@ namespace HackYeah.Application.Queries
             {
                 Latitude = e.Latitude,
                 Longitude = e.Longitude,
-                EncounterCategory = e.EncounterCategory,
+                IsWild = e.IsWild,
                 EncounterType = e.EncounterType,
                 TimeUtc = e.TimeUtc,
                 PropabilityOfOccurance = (int)((timeNow - e.TimeUtc).TotalMinutes / 180) * 100
