@@ -23,15 +23,16 @@ namespace HackYeah.Application.Queries
             CancellationToken cancellationToken)
         {
             var queryResult =
-                await _dbConnection.QueryAsync<GetEncounterTypesQueryResult>("select et.id, et.code, etp.name, etp.value_type \"ValueType\"\nfrom encounter_type et\njoin encounter_type_properties_encounter_types etpet on etpet.encounter_type_id = et.id\njoin encounter_type_property etp on etpet.encounter_type_property_id = etp.id\n");
+                await _dbConnection.QueryAsync<GetEncounterTypesQueryResult>("select et.id, et.code, etp.name, et.is_searchable \"IsSearchable\", etp.value_type \"ValueType\"\nfrom encounter_type et\njoin encounter_type_properties_encounter_types etpet on etpet.encounter_type_id = et.id\njoin encounter_type_property etp on etpet.encounter_type_property_id = etp.id\n");
 
-            var groups = queryResult.GroupBy(x => new { x.Id, x.Code });
+            var groups = queryResult.GroupBy(x => new { x.Id, x.Code, x.IsSearchable });
 
 
             var result = groups.Select(x => new GetEncounterTypesResult
             {
                 Id = x.Key.Id,
                 Code = x.Key.Code,
+                IsSearchable = x.Key.IsSearchable,
                 Properties = x.Select(z=> new GetEncounterTypesResultProperties
                 {
                     Name = z.Name,
@@ -49,6 +50,7 @@ public class GetEncounterTypesQueryResult
 {
     public Guid Id { get; set; }
     public string Code { get; set; }
+    public bool IsSearchable { get; set; }
     public string Name { get; set; }
     public EValueType ValueType { get; set; }
 }

@@ -6,6 +6,7 @@ public class GetEncounterTypesResult
 {
     public Guid Id { get; set; }
     public string Code { get; set; }
+    public bool IsSearchable { get; set; }
     public List<GetEncounterTypesResultProperties> Properties { get; set; }
 }
 

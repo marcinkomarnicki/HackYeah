@@ -56,22 +56,33 @@ namespace HackYeah.DAL
 
             var encounterTypeKotId = new Guid("D7E923A8-6781-41B0-9929-005D8B0F01D5");
             var encounterTypePiesId = new Guid("13C2CA92-6A13-482A-8E0E-62BD6682127B");
-
+            var encounterTypeDzikId = new Guid("CDCA0436-2CA1-4CDE-8581-B6917333B84F");
+            
             var kot = new EncounterType
             {
                 Id = encounterTypeKotId,
-                Code = "Kot"
+                Code = "Kot",
+                IsSearchable = true
             };
 
             var pies = new EncounterType
             {
                 Id = encounterTypePiesId,
-                Code = "Pies"
+                Code = "Pies",
+                IsSearchable = true
+            };
+            
+            var dzik = new EncounterType
+            {
+                Id = encounterTypeDzikId,
+                Code = "Dzik",
+                IsSearchable = false
             };
             //SEED
             modelBuilder.Entity<EncounterType>().HasData(
                 kot,
-                pies);
+                pies,
+                dzik);
 
 
             var encounterTypePropertyAttitudeId = new Guid("6E81DA60-5186-4983-A180-A0A357FB41F3");
@@ -240,6 +251,22 @@ namespace HackYeah.DAL
                             {
                                 encounter_type_id = encounterTypePiesId,
                                 encounter_type_property_id = encounterTypePropertySizeId
+                            },
+                            //dzik
+                            new
+                            {
+                                encounter_type_id = encounterTypeDzikId,
+                                encounter_type_property_id = encounterTypePropertyPackId
+                            },
+                            new
+                            {
+                                encounter_type_id = encounterTypeDzikId,
+                                encounter_type_property_id = encounterTypePropertyWithChildrenId
+                            },
+                            new
+                            {
+                                encounter_type_id = encounterTypeDzikId,
+                                encounter_type_property_id = encounterTypePropertyAttitudeId
                             }
                           );
                     });
