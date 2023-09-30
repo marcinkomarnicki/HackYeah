@@ -5,8 +5,8 @@ namespace HackYeah.DAL.Models;
 public class EncounterType
 {
     [Key]
-    public int Id { get; set; }
+    public Guid Id { get; set; }
 
     [Required]
-    public required decimal Code { get; set; }
+    public required string Code { get; set; }
 }

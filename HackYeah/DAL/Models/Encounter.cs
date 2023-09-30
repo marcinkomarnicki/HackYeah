@@ -4,15 +4,14 @@ namespace HackYeah.DAL.Models;
 
 public class Encounter
 {
-    [Key]
-    public int Id { get; set; }
+    [Key] public Guid Id { get; set; }
 
-    [Required]
     public required decimal Longitude { get; set; }
-    
-    [Required]
+
     public required decimal Latitude { get; set; }
-    
-    [Required]
-    public required EncounterType EncounterType { get; set; }
+
+    public EncounterType EncounterType { get; set; }
+
+    public DateTime TimeUtc { get; set; }
+    public Guid EncounterTypeId { get; set; }
 }
