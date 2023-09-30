@@ -15,4 +15,14 @@ public class EncounterResult
     public bool IsWild { get; set; }
 
     public int PropabilityOfOccurance { get; set; }
+    
+    public List<EncounterResultProperties> Properties { get; set; }
+}
+
+
+public class EncounterResultProperties
+{
+    public string Name { get; set; }
+    public string Value { get; set; }
+    public string ValueType { get; set; }
 }
