@@ -12,7 +12,7 @@ public class EncounterResult
 
     public DateTime TimeUtc { get; set; }
 
-    public EncounterCategory EncounterCategory { get; set; }
+    public bool EncounterCategory { get; set; }
 
     public int PropabilityOfOccurance { get; set; }
 }
