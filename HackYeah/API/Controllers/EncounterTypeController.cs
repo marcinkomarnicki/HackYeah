@@ -1,4 +1,5 @@
 ﻿using HackYeah.Application.Commands;
+using HackYeah.Application.Enums;
 using HackYeah.Application.Queries;
 using HackYeah.Application.Queries.Models;
 using MediatR;
@@ -24,5 +25,5 @@ public class EncounterTypeController : ControllerBase
 
         return result;
     }
-    
 }
+
