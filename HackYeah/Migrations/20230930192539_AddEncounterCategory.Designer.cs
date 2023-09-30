@@ -3,17 +3,20 @@ using System;
 using HackYeah.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace HackYeah.DAL.Migrations
+namespace HackYeah.Migrations
 {
     [DbContext(typeof(HackYeahDbContext))]
-    partial class HackYeahDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230930192539_AddEncounterCategory")]
+    partial class AddEncounterCategory
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -49,6 +52,10 @@ namespace HackYeah.DAL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid")
                         .HasColumnName("id");
+
+                    b.Property<int>("EncounterCategory")
+                        .HasColumnType("integer")
+                        .HasColumnName("encounter_category");
 
                     b.Property<Guid>("EncounterTypeId")
                         .HasColumnType("uuid")

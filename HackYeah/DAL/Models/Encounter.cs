@@ -14,4 +14,5 @@ public class Encounter
 
     public DateTime TimeUtc { get; set; }
     public Guid EncounterTypeId { get; set; }
+    public bool EncounterCategory { get; set; }
 }
