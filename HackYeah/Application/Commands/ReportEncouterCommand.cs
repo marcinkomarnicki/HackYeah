@@ -28,6 +28,7 @@ public class ReportEncounterCommandHandler : IRequestHandler<ReportEncounterComm
             Longitude = request.Longitude,
             EncounterType = null,
             EncounterTypeId = request.EncounterTypeId,
+            TimeUtc = DateTime.UtcNow
         };
 
         _dbContext.Add(encounter);
