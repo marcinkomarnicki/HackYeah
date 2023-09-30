@@ -17,6 +17,8 @@ namespace HackYeah.DAL
         }
 
         public DbSet<Demo> Demos { get; set; }
+        
+        public DbSet<Encounter> Encounters { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
