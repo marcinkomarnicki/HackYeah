@@ -14,4 +14,7 @@ public class Encounter
 
     public DateTime TimeUtc { get; set; }
     public Guid EncounterTypeId { get; set; }
+    public bool IsWild { get; set; }
+
+    public List<EncounterProperty> EncounterProperties { get; set; }
 }

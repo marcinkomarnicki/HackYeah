@@ -9,11 +9,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace HackYeah.DAL.Migrations
+namespace HackYeah.Migrations
 {
     [DbContext(typeof(HackYeahDbContext))]
-    [Migration("20230930181804_Initial")]
-    partial class Initial
+    [Migration("20230930195152_aaa")]
+    partial class aaa
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -56,6 +56,10 @@ namespace HackYeah.DAL.Migrations
                     b.Property<Guid>("EncounterTypeId")
                         .HasColumnType("uuid")
                         .HasColumnName("encounter_type_id");
+
+                    b.Property<bool>("IsWild")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_wild");
 
                     b.Property<decimal>("Latitude")
                         .HasColumnType("numeric")

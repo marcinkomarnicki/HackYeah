@@ -4,9 +4,9 @@ namespace HackYeah.DAL.Models;
 
 public class EncounterType
 {
-    [Key]
-    public Guid Id { get; set; }
+    [Key] public Guid Id { get; set; }
+    public List<EncounterTypeProperty> EncounterTypeProperties { get; set; }
 
-    [Required]
+    public bool IsSearchable { get; set; }
     public required string Code { get; set; }
 }

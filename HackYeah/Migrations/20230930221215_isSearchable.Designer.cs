@@ -3,17 +3,20 @@ using System;
 using HackYeah.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace HackYeah.DAL.Migrations
+namespace HackYeah.Migrations
 {
     [DbContext(typeof(HackYeahDbContext))]
-    partial class HackYeahDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230930221215_isSearchable")]
+    partial class isSearchable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -54,6 +57,10 @@ namespace HackYeah.DAL.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("encounter_type_id");
 
+                    b.Property<bool>("IsWild")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_wild");
+
                     b.Property<decimal>("Latitude")
                         .HasColumnType("numeric")
                         .HasColumnName("latitude");
@@ -87,6 +94,10 @@ namespace HackYeah.DAL.Migrations
                         .HasColumnType("text")
                         .HasColumnName("code");
 
+                    b.Property<bool>("IsSearchable")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_searchable");
+
                     b.HasKey("Id")
                         .HasName("pk_encounter_type");
 
@@ -96,12 +107,86 @@ namespace HackYeah.DAL.Migrations
                         new
                         {
                             Id = new Guid("d7e923a8-6781-41b0-9929-005d8b0f01d5"),
-                            Code = "Kot"
+                            Code = "Kot",
+                            IsSearchable = true
                         },
                         new
                         {
                             Id = new Guid("13c2ca92-6a13-482a-8e0e-62bd6682127b"),
-                            Code = "Pies"
+                            Code = "Pies",
+                            IsSearchable = true
+                        },
+                        new
+                        {
+                            Id = new Guid("cdca0436-2ca1-4cde-8581-b6917333b84f"),
+                            Code = "Dzik",
+                            IsSearchable = false
+                        });
+                });
+
+            modelBuilder.Entity("HackYeah.DAL.Models.EncounterTypeProperty", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("name");
+
+                    b.Property<int>("ValueType")
+                        .HasColumnType("integer")
+                        .HasColumnName("value_type");
+
+                    b.HasKey("Id")
+                        .HasName("pk_encounter_type_property");
+
+                    b.ToTable("encounter_type_property", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("6e81da60-5186-4983-a180-a0a357fb41f3"),
+                            Name = "Zachowanie",
+                            ValueType = 6
+                        },
+                        new
+                        {
+                            Id = new Guid("db69c2dd-da68-43b8-9194-19176be90b62"),
+                            Name = "Rasa",
+                            ValueType = 0
+                        },
+                        new
+                        {
+                            Id = new Guid("bb8bcc84-164b-4978-a183-05ff505d096e"),
+                            Name = "Obroża",
+                            ValueType = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("275e942d-8b0a-4c35-8fcf-88649ad67586"),
+                            Name = "Kolor",
+                            ValueType = 2
+                        },
+                        new
+                        {
+                            Id = new Guid("5b1c7bf6-93eb-4ecb-8d3d-5b588d931750"),
+                            Name = "Czy jest w stadzie",
+                            ValueType = 4
+                        },
+                        new
+                        {
+                            Id = new Guid("8d5ac209-3639-485d-8432-e01ffea199cb"),
+                            Name = "Wielkość",
+                            ValueType = 3
+                        },
+                        new
+                        {
+                            Id = new Guid("cb02f908-881a-47cc-85ab-1428d1816a43"),
+                            Name = "Czy jest z młodymi",
+                            ValueType = 5
                         });
                 });
 
@@ -349,6 +434,87 @@ namespace HackYeah.DAL.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("encounter_type_properties_encounter_types", b =>
+                {
+                    b.Property<Guid>("encounter_type_id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("encounter_type_id");
+
+                    b.Property<Guid>("encounter_type_property_id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("encounter_type_property_id");
+
+                    b.HasKey("encounter_type_id", "encounter_type_property_id")
+                        .HasName("pk_encounter_type_properties_encounter_types");
+
+                    b.HasIndex("encounter_type_property_id")
+                        .HasDatabaseName("ix_encounter_type_properties_encounter_types_encounter_type_pr");
+
+                    b.ToTable("encounter_type_properties_encounter_types", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            encounter_type_id = new Guid("d7e923a8-6781-41b0-9929-005d8b0f01d5"),
+                            encounter_type_property_id = new Guid("bb8bcc84-164b-4978-a183-05ff505d096e")
+                        },
+                        new
+                        {
+                            encounter_type_id = new Guid("d7e923a8-6781-41b0-9929-005d8b0f01d5"),
+                            encounter_type_property_id = new Guid("db69c2dd-da68-43b8-9194-19176be90b62")
+                        },
+                        new
+                        {
+                            encounter_type_id = new Guid("d7e923a8-6781-41b0-9929-005d8b0f01d5"),
+                            encounter_type_property_id = new Guid("275e942d-8b0a-4c35-8fcf-88649ad67586")
+                        },
+                        new
+                        {
+                            encounter_type_id = new Guid("d7e923a8-6781-41b0-9929-005d8b0f01d5"),
+                            encounter_type_property_id = new Guid("6e81da60-5186-4983-a180-a0a357fb41f3")
+                        },
+                        new
+                        {
+                            encounter_type_id = new Guid("13c2ca92-6a13-482a-8e0e-62bd6682127b"),
+                            encounter_type_property_id = new Guid("bb8bcc84-164b-4978-a183-05ff505d096e")
+                        },
+                        new
+                        {
+                            encounter_type_id = new Guid("13c2ca92-6a13-482a-8e0e-62bd6682127b"),
+                            encounter_type_property_id = new Guid("db69c2dd-da68-43b8-9194-19176be90b62")
+                        },
+                        new
+                        {
+                            encounter_type_id = new Guid("13c2ca92-6a13-482a-8e0e-62bd6682127b"),
+                            encounter_type_property_id = new Guid("275e942d-8b0a-4c35-8fcf-88649ad67586")
+                        },
+                        new
+                        {
+                            encounter_type_id = new Guid("13c2ca92-6a13-482a-8e0e-62bd6682127b"),
+                            encounter_type_property_id = new Guid("6e81da60-5186-4983-a180-a0a357fb41f3")
+                        },
+                        new
+                        {
+                            encounter_type_id = new Guid("13c2ca92-6a13-482a-8e0e-62bd6682127b"),
+                            encounter_type_property_id = new Guid("8d5ac209-3639-485d-8432-e01ffea199cb")
+                        },
+                        new
+                        {
+                            encounter_type_id = new Guid("cdca0436-2ca1-4cde-8581-b6917333b84f"),
+                            encounter_type_property_id = new Guid("5b1c7bf6-93eb-4ecb-8d3d-5b588d931750")
+                        },
+                        new
+                        {
+                            encounter_type_id = new Guid("cdca0436-2ca1-4cde-8581-b6917333b84f"),
+                            encounter_type_property_id = new Guid("cb02f908-881a-47cc-85ab-1428d1816a43")
+                        },
+                        new
+                        {
+                            encounter_type_id = new Guid("cdca0436-2ca1-4cde-8581-b6917333b84f"),
+                            encounter_type_property_id = new Guid("6e81da60-5186-4983-a180-a0a357fb41f3")
+                        });
+                });
+
             modelBuilder.Entity("HackYeah.DAL.Models.Encounter", b =>
                 {
                     b.HasOne("HackYeah.DAL.Models.EncounterType", "EncounterType")
@@ -416,6 +582,23 @@ namespace HackYeah.DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_asp_net_user_tokens_asp_net_users_user_id");
+                });
+
+            modelBuilder.Entity("encounter_type_properties_encounter_types", b =>
+                {
+                    b.HasOne("HackYeah.DAL.Models.EncounterType", null)
+                        .WithMany()
+                        .HasForeignKey("encounter_type_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_encounter_type_properties_encounter_types_encounter_type_en");
+
+                    b.HasOne("HackYeah.DAL.Models.EncounterTypeProperty", null)
+                        .WithMany()
+                        .HasForeignKey("encounter_type_property_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_encounter_type_properties_encounter_types_encounter_type_pr");
                 });
 #pragma warning restore 612, 618
         }
