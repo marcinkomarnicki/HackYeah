@@ -26,7 +26,7 @@ namespace HackYeah.Application.Queries
 
         public async Task<List<EncounterResult>> Handle(GetEncountersQuery request, CancellationToken cancellationToken)
         {
-            var timeNow = DateTime.Now;
+            var timeNow = DateTime.UtcNow;
             var minTime = timeNow.AddHours(-3);
 
             var dataFromDb = _dbContext.Encounters
