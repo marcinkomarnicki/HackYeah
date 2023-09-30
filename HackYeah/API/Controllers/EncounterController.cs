@@ -25,7 +25,7 @@ public class EncounterController : ControllerBase
         return id;
     }
 
-    [HttpGet]
+    [HttpPost]
     public async Task<List<EncounterResult>> GetEncounters(GetEncountersQuery input)
     {
         return await _mediator.Send(input);

@@ -1,5 +1,4 @@
 ﻿using HackYeah.Application.Queries.Models;
-
 using MediatR;
 using HackYeah.DAL;
 using Microsoft.EntityFrameworkCore;
@@ -39,6 +38,8 @@ namespace HackYeah.Application.Queries
                             e.Longitude < request.MaxLongitude &&
                             e.Longitude > request.MinLongitude)
                 .Include(encounter => encounter.EncounterType)
+                .Include(encounter => encounter.EncounterProperties)
+                .ThenInclude(propType => propType.EncounterTypeProperty)
                 .ToList();
 
             var result = dataFromDb.Select(e => new EncounterResult()
@@ -48,7 +49,13 @@ namespace HackYeah.Application.Queries
                 IsWild = e.IsWild,
                 EncounterType = e.EncounterType.Code,
                 TimeUtc = e.TimeUtc,
-                PropabilityOfOccurance = (int)((timeNow - e.TimeUtc).TotalMinutes / 180) * 100
+                PropabilityOfOccurance = (int)((timeNow - e.TimeUtc).TotalMinutes / 180) * 100,
+                Properties = e.EncounterProperties.Select(p => new EncounterResultProperties
+                {
+                    Name = p.EncounterTypeProperty.Name,
+                    ValueType = p.EncounterTypeProperty.ValueType.ToString(),
+                    Value = p.Value
+                }).ToList()
             }).ToList();
 
             return result;
