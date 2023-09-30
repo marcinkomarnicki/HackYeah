@@ -91,6 +91,18 @@ namespace HackYeah.DAL.Migrations
                         .HasName("pk_encounter_type");
 
                     b.ToTable("encounter_type", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("d7e923a8-6781-41b0-9929-005d8b0f01d5"),
+                            Code = "Kot"
+                        },
+                        new
+                        {
+                            Id = new Guid("13c2ca92-6a13-482a-8e0e-62bd6682127b"),
+                            Code = "Pies"
+                        });
                 });
 
             modelBuilder.Entity("HackYeah.DAL.Models.User", b =>

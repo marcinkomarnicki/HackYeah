@@ -28,10 +28,12 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 
-
-
   <ItemGroup>
     <Folder Include="DAL\Migrations\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="DAL\Migrations\HackYeahDbContextModelSnapshot.cs" />
   </ItemGroup>
 
 </Project>

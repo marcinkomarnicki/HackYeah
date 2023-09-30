@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace HackYeah.DAL.Migrations
 {
     [DbContext(typeof(HackYeahDbContext))]
-    [Migration("20230930175548_Initial")]
+    [Migration("20230930181804_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
