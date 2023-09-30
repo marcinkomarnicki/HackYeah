@@ -8,16 +8,7 @@
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="API\Models\**" />
-    <Compile Remove="Application\Exceptions\**" />
-    <Content Remove="API\Models\**" />
-    <Content Remove="Application\Exceptions\**" />
-    <EmbeddedResource Remove="API\Models\**" />
-    <EmbeddedResource Remove="Application\Exceptions\**" />
-    <None Remove="API\Models\**" />
-    <None Remove="Application\Exceptions\**" />
-  </ItemGroup>
+
 
   <ItemGroup>
     <PackageReference Include="Dapper" Version="2.0.151" />
