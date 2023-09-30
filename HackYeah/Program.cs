@@ -11,6 +11,7 @@ using System.Reflection;
 using System.Text;
 using HackYeah.API.Filters;
 using Microsoft.EntityFrameworkCore;
+using HackYeah.Application.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -74,6 +75,9 @@ builder.Services.AddOptions<JWTSection>()
     .ValidateDataAnnotations()
     .ValidateOnStart();
 
+builder.Services.AddOptions<PythonSection>()
+    .BindConfiguration(PythonSection.SectionName);
+
 builder.Services.AddAuthentication(opt =>
 {
     opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -102,6 +106,8 @@ builder.Services.AddHttpContextAccessor();
 
 builder.Services.TryAddScoped<CurrentUserProvider>();
 builder.Services.AddScoped<HackYeahDbConnection>();
+
+builder.Services.AddSingleton<ImageService>();
 
 var app = builder.Build();
 

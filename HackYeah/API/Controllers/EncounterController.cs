@@ -22,4 +22,12 @@ public class EncounterController : ControllerBase
 
         return id;
     }
+
+    [HttpPost]
+    public async Task<int>Image([FromForm] ReportImageEncounterCommand input)
+    {
+        var type = await _mediator.Send(input);
+
+        return type;
+    }
 }
