@@ -12,8 +12,9 @@ public class MissingPetReport
     public string TelephoneNumber { get; set; }
     public string LongitudeReport { get; set; }
     public string LatitudeReport { get; set; }
-    public DateTime TimeUtc { get; set; }
-    public Guid EncounterTypeId { get; set; }
-    public bool IsWild { get; set; }
+    public bool HasCollar { get; set; }
+    public string SpecialFeatures { get; set; }
+    public string Color { get; set; }
+    public string PetSize { get; set; }
 }
 
