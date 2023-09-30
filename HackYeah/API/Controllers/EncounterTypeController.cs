@@ -25,5 +25,4 @@ public class EncounterTypeController : ControllerBase
         return result;
     }
     
-    
 }
