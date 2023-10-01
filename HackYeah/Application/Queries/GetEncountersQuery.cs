@@ -77,7 +77,7 @@ namespace HackYeah.Application.Queries
             return _dbContext.EncounterImages
                 .Where(image => image.EncounterId == encounterId)
                 .ToList()
-                .Select(image => $"{scheme}://{host}/Encounters/Image/{image.Id}")
+                .Select(image => $"{scheme}://{host}/Encounter/Image/{image.Id}")
                 .ToList();
         }
     }
