@@ -1,4 +1,5 @@
-﻿using HackYeah.Application.Commands;
+﻿using HackYeah.API.Models;
+using HackYeah.Application.Commands;
 using HackYeah.Application.Queries;
 using HackYeah.Application.Queries.Models;
 using MediatR;
@@ -51,5 +52,32 @@ public class EncounterController : ControllerBase
         var type = await _mediator.Send(input);
 
         return type;
+    }
+
+    [HttpPost]
+    [Route("{id}/Image")]
+    public async Task AddImage([FromRoute] Guid id, [FromForm] AddEncounterImageInput input)
+    {
+        var command = new AddEncounterImageCommand
+        {
+            EncounterId = id,
+            ImageFile = input.ImageFile
+        };
+
+        await _mediator.Send(command);
+    }
+
+    [HttpGet]
+    [Route("Image/{id}")]
+    public async Task<IActionResult> GetImage([FromRoute] Guid id)
+    {
+        var query = new GetEncounterImageQuery
+        {
+            Id = id
+        };
+
+        var result = await _mediator.Send(query);
+
+        return File(result.ImageStream, result.MimeType);
     }
 }

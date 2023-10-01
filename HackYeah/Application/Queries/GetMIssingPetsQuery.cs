@@ -24,6 +24,9 @@ namespace HackYeah.Application.Queries
         public async Task<List<GetMissingPetResult>> Handle(GetMissingPetsQuery request,
             CancellationToken cancellationToken)
         {
+            var scheme = _hostProvider.Scheme;
+            var host = _hostProvider.Host;
+
             var dataFromDb = _dbContext.MissingPetsReports
                 .Include(encounter => encounter.EncounterType)
                 .ToList();
@@ -50,9 +53,6 @@ namespace HackYeah.Application.Queries
                 var images = _dbContext.MissingPetsReportImages
                     .Where(image => image.MissingPetReportId == missingPet.Id)
                     .ToList();
-
-                var scheme = _hostProvider.Scheme;
-                var host = _hostProvider.Host;
 
                 foreach (var image in images)
                 {

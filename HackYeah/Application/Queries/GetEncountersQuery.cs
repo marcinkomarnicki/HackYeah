@@ -2,6 +2,9 @@
 using MediatR;
 using HackYeah.DAL;
 using Microsoft.EntityFrameworkCore;
+using HackYeah.Infrastructure.Providers;
+using Microsoft.Extensions.Hosting;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace HackYeah.Application.Queries
 {
@@ -18,10 +21,12 @@ namespace HackYeah.Application.Queries
     public class GetEncountersQueryHandler : IRequestHandler<GetEncountersQuery, List<EncounterResult>>
     {
         private readonly HackYeahDbContext _dbContext;
+        private readonly HostProvider _hostProvider;
 
-        public GetEncountersQueryHandler(HackYeahDbContext dbContext)
+        public GetEncountersQueryHandler(HackYeahDbContext dbContext, HostProvider hostProvider)
         {
             _dbContext = dbContext;
+            _hostProvider = hostProvider;
         }
 
         public async Task<List<EncounterResult>> Handle(GetEncountersQuery request, CancellationToken cancellationToken)
@@ -57,10 +62,23 @@ namespace HackYeah.Application.Queries
                     Name = p.EncounterTypeProperty.Name,
                     ValueType = p.EncounterTypeProperty.ValueType.ToString(),
                     Value = p.Value
-                }).ToList()
+                }).ToList(),
+                Images = GetImages(e.Id)
             }).ToList();
 
             return result;
+        }
+
+        private List<string> GetImages(Guid encounterId)
+        {
+            var scheme = _hostProvider.Scheme;
+            var host = _hostProvider.Host;
+
+            return _dbContext.EncounterImages
+                .Where(image => image.EncounterId == encounterId)
+                .ToList()
+                .Select(image => $"{scheme}://{host}/Encounters/Image/{image.Id}")
+                .ToList();
         }
     }
 }

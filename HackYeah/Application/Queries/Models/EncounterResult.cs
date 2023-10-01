@@ -1,6 +1,4 @@
-﻿using HackYeah.DAL.Models;
-
-namespace HackYeah.Application.Queries.Models;
+﻿namespace HackYeah.Application.Queries.Models;
 
 public class EncounterResult
 {
@@ -17,6 +15,8 @@ public class EncounterResult
     public int PropabilityOfOccurance { get; set; }
     
     public List<EncounterResultProperties> Properties { get; set; }
+
+    public List<string> Images { get; set; }
 }
 
 

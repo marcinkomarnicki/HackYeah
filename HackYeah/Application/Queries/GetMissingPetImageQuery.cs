@@ -4,7 +4,6 @@ using HackYeah.Application.Services;
 using HackYeah.DAL;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace HackYeah.Application.Queries
 {

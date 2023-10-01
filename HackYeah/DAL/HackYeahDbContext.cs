@@ -22,6 +22,8 @@ namespace HackYeah.DAL
 
         public DbSet<Encounter> Encounters { get; set; }
 
+        public DbSet<EncounterImage> EncounterImages { get; set; }
+
         public DbSet<EncounterType> EncounterType { get; set; }
         
         public DbSet<MissingPetReport> MissingPetsReports { get; set; }
