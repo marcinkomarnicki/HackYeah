@@ -28,12 +28,12 @@ namespace HackYeah.Application.Queries
             var dataFromDb = _dbContext.Encounters
                 .Where(e => e.TimeUtc > request.StartDate &&
                             e.TimeUtc < request.EndDate &&
-                            e.IsWild == true &&
                             e.Latitude < request.MaxLatitude &&
                             e.Latitude > request.MinLatitude &&
                             e.Longitude < request.MaxLongitude &&
                             e.Longitude > request.MinLongitude)
                 .Include(encounter => encounter.EncounterType)
+                .Where(p => p.EncounterType.IsSearchable == false)
                 .ToList();
 
             var types = dataFromDb.Select(e => e.EncounterType.Code);
