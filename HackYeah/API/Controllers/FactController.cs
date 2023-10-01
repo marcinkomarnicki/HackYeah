@@ -1,6 +1,4 @@
-﻿using HackYeah.Application.Commands;
-using HackYeah.Application.Queries;
-using HackYeah.Application.Queries.Models;
+﻿using HackYeah.Application.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
