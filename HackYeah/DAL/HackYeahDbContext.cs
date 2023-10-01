@@ -22,6 +22,8 @@ namespace HackYeah.DAL
 
         public DbSet<Encounter> Encounters { get; set; }
 
+        public DbSet<EncounterType> EncounterType { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseNpgsql(_connectionString)
@@ -65,21 +67,24 @@ namespace HackYeah.DAL
             {
                 Id = encounterTypeKotId,
                 Code = "Kot",
-                IsSearchable = true
+                IsSearchable = true,
+                AiLabelId = 9
             };
 
             var pies = new EncounterType
             {
                 Id = encounterTypePiesId,
                 Code = "Pies",
-                IsSearchable = true
+                IsSearchable = true,
+                AiLabelId = 18
             };
             
             var dzik = new EncounterType
             {
                 Id = encounterTypeDzikId,
                 Code = "Dzik",
-                IsSearchable = false
+                IsSearchable = false,
+                AiLabelId = 7
             };
             //SEED
             modelBuilder.Entity<EncounterType>().HasData(

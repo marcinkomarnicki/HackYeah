@@ -9,4 +9,6 @@ public class EncounterType
 
     public bool IsSearchable { get; set; }
     public required string Code { get; set; }
+
+    public int AiLabelId { get; set; }
 }

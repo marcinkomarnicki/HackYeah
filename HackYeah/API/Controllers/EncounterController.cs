@@ -46,7 +46,7 @@ public class EncounterController : ControllerBase
     }
 
     [HttpPost("/encounter-type-by-image")]
-    public async Task<int> GetEncounterType([FromForm] ReportImageEncounterCommand input)
+    public async Task<string?> GetEncounterType([FromForm] ReportImageEncounterCommand input)
     {
         var type = await _mediator.Send(input);
 
