@@ -71,11 +71,26 @@ namespace HackYeah.Migrations
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
-                    code = table.Column<string>(type: "text", nullable: false)
+                    is_searchable = table.Column<bool>(type: "boolean", nullable: false),
+                    code = table.Column<string>(type: "text", nullable: false),
+                    ai_label_id = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("pk_encounter_type", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "encounter_type_property",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    name = table.Column<string>(type: "text", nullable: false),
+                    value_type = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_encounter_type_property", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -205,13 +220,143 @@ namespace HackYeah.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "missing_pets_reports",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    encounter_type_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    rase = table.Column<string>(type: "text", nullable: false),
+                    pet_name = table.Column<string>(type: "text", nullable: false),
+                    reporter_name = table.Column<string>(type: "text", nullable: false),
+                    telephone_number = table.Column<string>(type: "text", nullable: false),
+                    longitude_report = table.Column<decimal>(type: "numeric", nullable: false),
+                    latitude_report = table.Column<decimal>(type: "numeric", nullable: false),
+                    has_collar = table.Column<bool>(type: "boolean", nullable: false),
+                    special_features = table.Column<string>(type: "text", nullable: false),
+                    color = table.Column<string>(type: "text", nullable: false),
+                    pet_size = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_missing_pets_reports", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_missing_pets_reports_encounter_type_encounter_type_id",
+                        column: x => x.encounter_type_id,
+                        principalTable: "encounter_type",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "encounter_type_properties_encounter_types",
+                columns: table => new
+                {
+                    encounter_type_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    encounter_type_property_id = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_encounter_type_properties_encounter_types", x => new { x.encounter_type_id, x.encounter_type_property_id });
+                    table.ForeignKey(
+                        name: "fk_encounter_type_properties_encounter_types_encounter_type_en",
+                        column: x => x.encounter_type_id,
+                        principalTable: "encounter_type",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "fk_encounter_type_properties_encounter_types_encounter_type_pr",
+                        column: x => x.encounter_type_property_id,
+                        principalTable: "encounter_type_property",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "encounter_property",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    encounter_type_property_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    value = table.Column<string>(type: "text", nullable: false),
+                    encounter_id = table.Column<Guid>(type: "uuid", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_encounter_property", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_encounter_property_encounter_type_property_encounter_type_p",
+                        column: x => x.encounter_type_property_id,
+                        principalTable: "encounter_type_property",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "fk_encounter_property_encounters_encounter_id",
+                        column: x => x.encounter_id,
+                        principalTable: "encounters",
+                        principalColumn: "id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "missing_pets_report_images",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    mime_type = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
+                    missing_pet_report_id = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_missing_pets_report_images", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_missing_pets_report_images_missing_pets_reports_missing_pet",
+                        column: x => x.missing_pet_report_id,
+                        principalTable: "missing_pets_reports",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.InsertData(
                 table: "encounter_type",
-                columns: new[] { "id", "code" },
+                columns: new[] { "id", "ai_label_id", "code", "is_searchable" },
                 values: new object[,]
                 {
-                    { new Guid("13c2ca92-6a13-482a-8e0e-62bd6682127b"), "Pies" },
-                    { new Guid("d7e923a8-6781-41b0-9929-005d8b0f01d5"), "Kot" }
+                    { new Guid("13c2ca92-6a13-482a-8e0e-62bd6682127b"), 18, "Pies", true },
+                    { new Guid("cdca0436-2ca1-4cde-8581-b6917333b84f"), 7, "Dzik", false },
+                    { new Guid("d7e923a8-6781-41b0-9929-005d8b0f01d5"), 9, "Kot", true }
+                });
+
+            migrationBuilder.InsertData(
+                table: "encounter_type_property",
+                columns: new[] { "id", "name", "value_type" },
+                values: new object[,]
+                {
+                    { new Guid("275e942d-8b0a-4c35-8fcf-88649ad67586"), "Kolor", 2 },
+                    { new Guid("5b1c7bf6-93eb-4ecb-8d3d-5b588d931750"), "Czy jest w stadzie", 4 },
+                    { new Guid("6e81da60-5186-4983-a180-a0a357fb41f3"), "Zachowanie", 6 },
+                    { new Guid("8d5ac209-3639-485d-8432-e01ffea199cb"), "Wielkość", 3 },
+                    { new Guid("bb8bcc84-164b-4978-a183-05ff505d096e"), "Obroża", 1 },
+                    { new Guid("cb02f908-881a-47cc-85ab-1428d1816a43"), "Czy jest z młodymi", 5 },
+                    { new Guid("db69c2dd-da68-43b8-9194-19176be90b62"), "Rasa", 0 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "encounter_type_properties_encounter_types",
+                columns: new[] { "encounter_type_id", "encounter_type_property_id" },
+                values: new object[,]
+                {
+                    { new Guid("13c2ca92-6a13-482a-8e0e-62bd6682127b"), new Guid("275e942d-8b0a-4c35-8fcf-88649ad67586") },
+                    { new Guid("13c2ca92-6a13-482a-8e0e-62bd6682127b"), new Guid("6e81da60-5186-4983-a180-a0a357fb41f3") },
+                    { new Guid("13c2ca92-6a13-482a-8e0e-62bd6682127b"), new Guid("8d5ac209-3639-485d-8432-e01ffea199cb") },
+                    { new Guid("13c2ca92-6a13-482a-8e0e-62bd6682127b"), new Guid("bb8bcc84-164b-4978-a183-05ff505d096e") },
+                    { new Guid("13c2ca92-6a13-482a-8e0e-62bd6682127b"), new Guid("db69c2dd-da68-43b8-9194-19176be90b62") },
+                    { new Guid("cdca0436-2ca1-4cde-8581-b6917333b84f"), new Guid("5b1c7bf6-93eb-4ecb-8d3d-5b588d931750") },
+                    { new Guid("cdca0436-2ca1-4cde-8581-b6917333b84f"), new Guid("6e81da60-5186-4983-a180-a0a357fb41f3") },
+                    { new Guid("cdca0436-2ca1-4cde-8581-b6917333b84f"), new Guid("cb02f908-881a-47cc-85ab-1428d1816a43") },
+                    { new Guid("d7e923a8-6781-41b0-9929-005d8b0f01d5"), new Guid("275e942d-8b0a-4c35-8fcf-88649ad67586") },
+                    { new Guid("d7e923a8-6781-41b0-9929-005d8b0f01d5"), new Guid("6e81da60-5186-4983-a180-a0a357fb41f3") },
+                    { new Guid("d7e923a8-6781-41b0-9929-005d8b0f01d5"), new Guid("bb8bcc84-164b-4978-a183-05ff505d096e") },
+                    { new Guid("d7e923a8-6781-41b0-9929-005d8b0f01d5"), new Guid("db69c2dd-da68-43b8-9194-19176be90b62") }
                 });
 
             migrationBuilder.CreateIndex(
@@ -252,8 +397,33 @@ namespace HackYeah.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "ix_encounter_property_encounter_id",
+                table: "encounter_property",
+                column: "encounter_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_encounter_property_encounter_type_property_id",
+                table: "encounter_property",
+                column: "encounter_type_property_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_encounter_type_properties_encounter_types_encounter_type_pr",
+                table: "encounter_type_properties_encounter_types",
+                column: "encounter_type_property_id");
+
+            migrationBuilder.CreateIndex(
                 name: "ix_encounters_encounter_type_id",
                 table: "encounters",
+                column: "encounter_type_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_missing_pets_report_images_missing_pet_report_id",
+                table: "missing_pets_report_images",
+                column: "missing_pet_report_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_missing_pets_reports_encounter_type_id",
+                table: "missing_pets_reports",
                 column: "encounter_type_id");
         }
 
@@ -279,13 +449,28 @@ namespace HackYeah.Migrations
                 name: "demos");
 
             migrationBuilder.DropTable(
-                name: "encounters");
+                name: "encounter_property");
+
+            migrationBuilder.DropTable(
+                name: "encounter_type_properties_encounter_types");
+
+            migrationBuilder.DropTable(
+                name: "missing_pets_report_images");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "encounters");
+
+            migrationBuilder.DropTable(
+                name: "encounter_type_property");
+
+            migrationBuilder.DropTable(
+                name: "missing_pets_reports");
 
             migrationBuilder.DropTable(
                 name: "encounter_type");

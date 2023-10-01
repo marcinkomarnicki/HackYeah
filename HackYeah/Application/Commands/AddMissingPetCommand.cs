@@ -11,8 +11,8 @@ public class AddMissingPetCommand : IRequest<Guid>
     public string PetName { get; set; }
     public string ReporterName { get; set; }
     public string TelephoneNumber { get; set; }
-    public string LongitudeReport { get; set; }
-    public string LatitudeReport { get; set; }
+    public decimal LongitudeReport { get; set; }
+    public decimal LatitudeReport { get; set; }
     public bool HasCollar { get; set; }
     public string SpecialFeatures { get; set; }
     public string Color { get; set; }

@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace HackYeah.Migrations
 {
     [DbContext(typeof(HackYeahDbContext))]
-    [Migration("20231001023047_MissingPetReportImage")]
-    partial class MissingPetReportImage
+    [Migration("20231001033637_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -245,14 +245,12 @@ namespace HackYeah.Migrations
                         .HasColumnType("boolean")
                         .HasColumnName("has_collar");
 
-                    b.Property<string>("LatitudeReport")
-                        .IsRequired()
-                        .HasColumnType("text")
+                    b.Property<decimal>("LatitudeReport")
+                        .HasColumnType("numeric")
                         .HasColumnName("latitude_report");
 
-                    b.Property<string>("LongitudeReport")
-                        .IsRequired()
-                        .HasColumnType("text")
+                    b.Property<decimal>("LongitudeReport")
+                        .HasColumnType("numeric")
                         .HasColumnName("longitude_report");
 
                     b.Property<string>("PetName")
