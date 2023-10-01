@@ -2,13 +2,11 @@
 using Microsoft.Extensions.Options;
 using Python.Runtime;
 using System.Reflection;
-using static Python.Runtime.Py;
 
 namespace HackYeah.Application.Services
 {
-    public class ImageService : IDisposable
+    public class ImageService
     {
-        private GILState? _gilState;
         private readonly PyObject _script;
 
         public ImageService(IOptions<PythonSection> options)
@@ -23,14 +21,15 @@ namespace HackYeah.Application.Services
 
             var predictPath = Path.Combine(dir, "predict");
 
-            _gilState = Py.GIL();
+            using (Py.GIL())
+            {
+                dynamic os = Py.Import("os");
+                dynamic sys = Py.Import("sys");
+                sys.path.append(os.path.dirname(os.path.expanduser($"{predictPath}.py")));
 
-            dynamic os = Py.Import("os");
-            dynamic sys = Py.Import("sys");
-            sys.path.append(os.path.dirname(os.path.expanduser($"{predictPath}.py")));
-
-            _script = Py.Import("predict");
-            _script.InvokeMethod("loadModel", new PyObject[] { new PyString(modelPath) }); ;
+                _script = Py.Import("predict");
+                _script.InvokeMethod("loadModel", new PyObject[] { new PyString(modelPath) });
+            }
         }
 
         public int Predict(Stream stream, string fileExtension)
@@ -44,17 +43,14 @@ namespace HackYeah.Application.Services
                 stream.CopyTo(fileStream);
             }
 
-            var result = int.Parse(_script.InvokeMethod("predict", new PyObject[] { new PyString(tempDir.FullName) }).ToString());
+            using (Py.GIL())
+            {
+                var result = int.Parse(_script.InvokeMethod("predict", new PyObject[] { new PyString(tempDir.FullName) }).ToString());
 
-            Directory.Delete(tempDir.FullName, true);
+                Directory.Delete(tempDir.FullName, true);
 
-            return result;
-        }
-
-        public void Dispose()
-        {
-            _gilState?.Dispose();
-            _gilState = null;
+                return result;
+            }
         }
     }
 }
