@@ -18,8 +18,6 @@ namespace HackYeah.DAL
             _connectionString = connectionStringsOptions.Value.HackYeah;
         }
 
-        public DbSet<Demo> Demos { get; set; }
-
         public DbSet<Encounter> Encounters { get; set; }
 
         public DbSet<EncounterImage> EncounterImages { get; set; }
@@ -51,20 +49,6 @@ namespace HackYeah.DAL
             modelBuilder.Entity<MissingPetReport>()
                 .HasOne(x => x.EncounterType)
                 .WithMany().HasForeignKey(x => x.EncounterTypeId);
-            
-            // modelBuilder.Entity<PetFile>()
-            //     .HasOne(x => x.MissingPetReport)
-            //     .WithOne().HasForeignKey(y => y);
-            /*
-            modelBuilder.Entity<EncounterType>()
-                .HasMany(e => e.EncounterTypeProperties)
-                .WithMany(e => e.EncounterTypes)
-                .UsingEntity(
-                    "encounter_types_encounter_type_properties",
-                    r => r.HasOne(typeof(EncounterTypeProperty)).WithMany().HasForeignKey("encounter_type_property_id").HasPrincipalKey(nameof(EncounterTypeProperty.Id)),
-                    l => l.HasOne(typeof(EncounterType)).WithMany().HasForeignKey("encounter_type_id").HasPrincipalKey(nameof(EncounterType.Id)),
-                    j => j.HasKey("encounter_type_id", "encounter_type_property_id"));
-                    */
 
 
             var encounterTypeKotId = new Guid("D7E923A8-6781-41B0-9929-005D8B0F01D5");
@@ -153,64 +137,6 @@ namespace HackYeah.DAL
                     Name = "Czy jest z młodymi"
                 }
             );
-
-            /*modelBuilder.Entity<EncounterTypesEncounterTypeProperties>().HasData(
-                new EncounterTypesEncounterTypeProperties
-                {
-                    Id = new Guid("CFDB3BE4-3019-41B4-A042-DC890A5D3679"),
-                    EncounterTypeId = encounterTypePiesId,
-                    EncounterTypePropertyId = encounterTypePropertyCollarId
-                },
-                new EncounterTypesEncounterTypeProperties
-                {
-                    Id = new Guid("BE356819-7B76-48C8-AC6E-849559A72554"),
-                    EncounterTypeId = encounterTypePiesId,
-                    EncounterTypePropertyId = encounterTypePropertyColorId
-                },
-                new EncounterTypesEncounterTypeProperties
-                {
-                    Id = new Guid("CF7C0191-B37A-40B2-8B52-F4EFA40C1ED8"),
-                    EncounterTypeId = encounterTypePiesId,
-                    EncounterTypePropertyId = encounterTypePropertyBreedId
-                },
-                new EncounterTypesEncounterTypeProperties
-                {
-                    Id = new Guid("5CBCC212-C9F9-48AC-A992-F300D7CF7E07"),
-                    EncounterTypeId = encounterTypePiesId,
-                    EncounterTypePropertyId = encounterTypePropertyAttitudeId
-                },
-                new EncounterTypesEncounterTypeProperties
-                {
-                    Id = new Guid("11D94376-6F03-4275-AF07-A0BC2983C090"),
-                    EncounterTypeId = encounterTypePiesId,
-                    EncounterTypePropertyId = encounterTypePropertySizeId
-                },
-                new EncounterTypesEncounterTypeProperties
-                {
-                    Id = new Guid("CAC8E6C1-7D1A-4CA7-96E5-96DDBFDE7064"),
-                    EncounterTypeId = encounterTypeKotId,
-                    EncounterTypePropertyId = encounterTypePropertyCollarId
-                },
-                new EncounterTypesEncounterTypeProperties
-                {
-                    Id = new Guid("7F921E9F-99FC-4930-8805-1E4CD5CBD2FB"),
-                    EncounterTypeId = encounterTypeKotId,
-                    EncounterTypePropertyId = encounterTypePropertyColorId
-                },
-                new EncounterTypesEncounterTypeProperties
-                {
-                    Id = new Guid("93B13B81-1460-4D6B-A6D9-7ED2405EFDE3"),
-                    EncounterTypeId = encounterTypeKotId,
-                    EncounterTypePropertyId = encounterTypePropertyBreedId
-                },
-                new EncounterTypesEncounterTypeProperties
-                {
-                    Id = new Guid("5F3958A6-50FA-4638-B8AC-F6F2744FFAC4"),
-                    EncounterTypeId = encounterTypeKotId,
-                    EncounterTypePropertyId = encounterTypePropertyAttitudeId
-                }
-            );*/
-
 
             modelBuilder.Entity<EncounterType>()
                 .HasMany(p => p.EncounterTypeProperties)
