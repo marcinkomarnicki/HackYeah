@@ -32,7 +32,7 @@ namespace HackYeah.Application.Queries
         public async Task<List<EncounterResult>> Handle(GetEncountersQuery request, CancellationToken cancellationToken)
         {
             var timeNow = DateTime.UtcNow;
-            var minTime = timeNow.AddHours(-3);
+            var minTime = timeNow.AddHours(-10);
 
             var dataFromDb = _dbContext.Encounters
                 .Where(e =>

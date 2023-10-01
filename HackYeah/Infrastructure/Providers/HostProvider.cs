@@ -9,7 +9,20 @@
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public string Scheme => _httpContextAccessor?.HttpContext?.Request?.Scheme.ToString()!;
+        public string Scheme
+        {
+            get
+            {
+                var scheme = _httpContextAccessor?.HttpContext?.Request?.Scheme.ToString()!;
+
+                if (!scheme.EndsWith("s"))
+                {
+                    scheme = $"{scheme}s";
+                }
+
+                return scheme;
+            }
+        }
 
         public string Host => _httpContextAccessor?.HttpContext?.Request?.Host.ToString()!;
     }
