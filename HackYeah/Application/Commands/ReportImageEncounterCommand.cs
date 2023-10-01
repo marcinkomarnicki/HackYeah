@@ -5,32 +5,32 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HackYeah.Application.Commands
 {
-    public class ReportImageEncounterCommand : IRequest<string?>
+    public class ReportImageEncounterCommand : IRequest<Guid?>
     {
         public IFormFile ImageFile { get; set; }
     }
 
-    public class ReportImageEncounterCommandHandler : IRequestHandler<ReportImageEncounterCommand, string?>
+    public class ReportImageEncounterCommandHandler : IRequestHandler<ReportImageEncounterCommand, Guid?>
     {
-        private readonly ImageService _imageService;
+        private readonly ImagePredictionService _imagePredictionService;
         private readonly HackYeahDbContext _dbContext;
 
-        public ReportImageEncounterCommandHandler(ImageService imageService, HackYeahDbContext dbContext)
+        public ReportImageEncounterCommandHandler(ImagePredictionService imagePredictionService, HackYeahDbContext dbContext)
         {
-            _imageService = imageService;
+            _imagePredictionService = imagePredictionService;
             _dbContext = dbContext;
         }
 
-        public Task<string?> Handle(ReportImageEncounterCommand request, CancellationToken cancellationToken)
+        public async Task<Guid?> Handle(ReportImageEncounterCommand request, CancellationToken cancellationToken)
         {
             using (var imageFileStream = request.ImageFile.OpenReadStream())
             {
-                var aiLabelId = _imageService.Predict(imageFileStream, Path.GetExtension(request.ImageFile.FileName));
+                var aiLabelId = _imagePredictionService.Predict(imageFileStream, Path.GetExtension(request.ImageFile.FileName));
 
-                return _dbContext.EncounterType
-                    .Where(et => et.AiLabelId == aiLabelId)
-                    .Select(et => et.Code)
-                    .FirstOrDefaultAsync(cancellationToken);
+                var encounterType = await _dbContext.EncounterType
+                    .FirstOrDefaultAsync(et => et.AiLabelId == aiLabelId);
+
+                return encounterType == null ? (Guid?)null : encounterType.Id;
             }
         }
     }

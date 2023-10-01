@@ -107,6 +107,7 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.TryAddScoped<CurrentUserProvider>();
 builder.Services.AddScoped<HackYeahDbConnection>();
 
+builder.Services.AddSingleton<ImagePredictionService>();
 builder.Services.AddSingleton<ImageService>();
 
 var app = builder.Build();
