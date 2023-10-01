@@ -1,4 +1,5 @@
-﻿using HackYeah.Application.Commands;
+﻿using HackYeah.API.Models;
+using HackYeah.Application.Commands;
 using HackYeah.Application.Queries;
 using HackYeah.Application.Queries.Models;
 using MediatR;
@@ -24,7 +25,34 @@ public class MissingPetController : ControllerBase
 
         return result;
     }
-    
+
+    [HttpPost]
+    [Route("{id}/Image")]
+    public async Task AddImage([FromRoute] Guid id, [FromForm] AddMissingPetInput input)
+    {
+        var command = new AddMissingPetImageCommand
+        {
+            MissingPetReportId = id,
+            ImageFile = input.ImageFile
+        };
+
+        await _mediator.Send(command);
+    }
+
+    [HttpGet]
+    [Route("Image/{id}")]
+    public async Task<IActionResult> GetImage([FromRoute] Guid id)
+    {
+        var query = new GetMissingPetImageQuery
+        {
+            Id = id
+        };
+
+        var result = await _mediator.Send(query);
+        
+        return File(result.ImageStream, result.MimeType);
+    }
+
     [HttpPost]
     public async Task<List<GetMissingPetResult>> GetMissingEncounter( )
     {
@@ -34,7 +62,7 @@ public class MissingPetController : ControllerBase
     }
     
     [HttpPost]
-    [Route("/{id}")]
+    [Route("{id}")]
     public async Task<GetMissingPetResult> GetMissingEncounter([FromRoute] Guid id )
     {
         var result = await _mediator.Send(new GetMissingPetQuery

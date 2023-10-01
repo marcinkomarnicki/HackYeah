@@ -26,6 +26,8 @@ namespace HackYeah.DAL
         
         public DbSet<MissingPetReport> MissingPetsReports { get; set; }
 
+        public DbSet<MissingPetReportImage> MissingPetsReportImages { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseNpgsql(_connectionString)

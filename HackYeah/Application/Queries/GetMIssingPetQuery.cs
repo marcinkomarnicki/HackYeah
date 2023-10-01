@@ -2,6 +2,7 @@
 using MediatR;
 using HackYeah.DAL;
 using Microsoft.EntityFrameworkCore;
+using HackYeah.Infrastructure.Providers;
 
 namespace HackYeah.Application.Queries
 {
@@ -13,10 +14,12 @@ namespace HackYeah.Application.Queries
     public class GetMissingPetQueryHandler : IRequestHandler<GetMissingPetQuery, GetMissingPetResult>
     {
         private readonly HackYeahDbContext _dbContext;
+        private readonly HostProvider _hostProvider;
 
-        public GetMissingPetQueryHandler(HackYeahDbContext dbContext)
+        public GetMissingPetQueryHandler(HackYeahDbContext dbContext, HostProvider hostProvider)
         {
             _dbContext = dbContext;
+            _hostProvider = hostProvider;
         }
 
         public async Task<GetMissingPetResult> Handle(GetMissingPetQuery request,
@@ -28,6 +31,7 @@ namespace HackYeah.Application.Queries
 
             var result = new GetMissingPetResult()
             {
+                Id = report.Id,
                 EncounterTypeId = report.EncounterTypeId,
                 EncounterTypeName = report.EncounterType.Code,
                 Color = report.Color,
@@ -41,6 +45,18 @@ namespace HackYeah.Application.Queries
                 SpecialFeatures = report.SpecialFeatures,
                 TelephoneNumber = report.TelephoneNumber
             };
+
+            var images = _dbContext.MissingPetsReportImages
+                .Where(image => image.MissingPetReportId == report.Id)
+                .ToList();
+
+            var scheme = _hostProvider.Scheme;
+            var host = _hostProvider.Host;
+
+            foreach (var image in images)
+            {
+                result.Images.Add($"{scheme}://{host}/MissingPet/Image/{image.Id}");
+            }
 
             return result;
         }

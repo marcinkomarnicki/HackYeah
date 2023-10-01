@@ -1,9 +1,13 @@
-﻿using HackYeah.DAL.Models;
-
-namespace HackYeah.Application.Queries.Models;
+﻿namespace HackYeah.Application.Queries.Models;
 
 public class GetMissingPetResult
 {
+    public GetMissingPetResult()
+    {
+        Images = new List<string>();
+    }
+
+    public Guid Id { get; set; }
     public string EncounterTypeName { get; set; }
     public Guid EncounterTypeId { get; set; }
     public string Rase { get; set; }
@@ -16,4 +20,5 @@ public class GetMissingPetResult
     public string SpecialFeatures { get; set; }
     public string Color { get; set; }
     public string PetSize { get; set; }
+    public List<string> Images { get; set; }
 }

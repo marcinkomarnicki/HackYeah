@@ -8,6 +8,8 @@ namespace HackYeah.Application.Services
 
         public void Save(Stream stream, string fileName) 
         {
+            Directory.CreateDirectory(GetAbsoluteDirPath());
+
             var filePath = Path.Combine(GetAbsoluteDirPath(), fileName);
 
             using (var fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
