@@ -56,7 +56,7 @@ namespace HackYeah.Application.Queries
                 IsWild = !e.EncounterType.IsSearchable,
                 EncounterType = e.EncounterType.Code,
                 TimeUtc = e.TimeUtc,
-                PropabilityOfOccurance = (int)(((timeNow - e.TimeUtc).TotalMinutes / 180.0) * 100.0),
+                PropabilityOfOccurance = 100 - (int)(((timeNow - e.TimeUtc).TotalMinutes / 180.0) * 100.0),
                 Properties = e.EncounterProperties.Select(p => new EncounterResultProperties
                 {
                     Name = p.EncounterTypeProperty.Name,
