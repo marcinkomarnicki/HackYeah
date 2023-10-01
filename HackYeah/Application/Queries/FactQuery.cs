@@ -18,9 +18,9 @@ namespace HackYeah.Application.Queries
         public async Task<string> Handle(FactQuery request,
             CancellationToken cancellationToken)
         {
-            OpenAIClient openAiClient = new OpenAIClient("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");
+            OpenAIClient openAiClient = new OpenAIClient("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");
 
-            var response = await openAiClient.GetCompletionsAsync("text-davinci-003", $"Napisz mi krótką ciekawostkę o zwierzęciu {request.AnimalType}");
+            var response = await openAiClient.GetCompletionsAsync("text-davinci-003", $"Napisz mi krotka ciekawostke o zwierzeciu {request.AnimalType}");
 
             var result = response.Value.Choices.First();
 
