@@ -72,4 +72,16 @@ public class MissingPetController : ControllerBase
 
         return result;
     }
+
+    [HttpDelete]
+    [Route("{id}")]
+    public async Task<Guid> DeleteMissingPet([FromRoute] Guid id )
+    {
+        var result = await _mediator.Send(new DeleteMissingPetCommand
+        {
+            MissingPetReportId = id
+        });
+
+        return result;
+    }
 }
