@@ -17,11 +17,31 @@ public class MissingPetController : ControllerBase
         _mediator = mediator;
     }
 
-    [HttpPost]
-    public async Task<Guid> GetMissingEncounter(ReportEncounterCommand input)
+    [HttpPut]
+    public async Task<Guid> PutReport(AddMissingPetCommand input )
     {
-        var id = await _mediator.Send(input);
+        var result = await _mediator.Send(input);
 
-        return id;
+        return result;
+    }
+    
+    [HttpPost]
+    public async Task<List<GetMissingPetResult>> GetMissingEncounter( )
+    {
+        var result = await _mediator.Send(new GetMissingPetsQuery());
+
+        return result;
+    }
+    
+    [HttpPost]
+    [Route("/{id}")]
+    public async Task<GetMissingPetResult> GetMissingEncounter([FromRoute] Guid id )
+    {
+        var result = await _mediator.Send(new GetMissingPetQuery
+        {
+            MissingPetReportId = id
+        });
+
+        return result;
     }
 }

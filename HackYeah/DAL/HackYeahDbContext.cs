@@ -23,6 +23,8 @@ namespace HackYeah.DAL
         public DbSet<Encounter> Encounters { get; set; }
 
         public DbSet<EncounterType> EncounterType { get; set; }
+        
+        public DbSet<MissingPetReport> MissingPetsReports { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -38,12 +40,14 @@ namespace HackYeah.DAL
                 .HasOne(x => x.EncounterType)
                 .WithMany().HasForeignKey(x => x.EncounterTypeId);
 
-
             modelBuilder.Entity<EncounterType>()
                 .HasMany(x => x.EncounterTypeProperties)
                 .WithMany(x => x.EncounterTypes);
-
-
+            
+            modelBuilder.Entity<MissingPetReport>()
+                .HasOne(x => x.EncounterType)
+                .WithMany().HasForeignKey(x => x.EncounterTypeId);
+            
             // modelBuilder.Entity<PetFile>()
             //     .HasOne(x => x.MissingPetReport)
             //     .WithOne().HasForeignKey(y => y);
