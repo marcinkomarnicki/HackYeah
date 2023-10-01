@@ -33,7 +33,7 @@ namespace HackYeah.Application.Queries
             {
                 Id = x.Key.Id,
                 Code = x.Key.Code,
-                IsSearchable = x.Key.IsSearchable,
+                IsWild = !x.Key.IsSearchable,
                 Properties = x.Select(z => new GetEncounterTypesResultProperties
                 {
                     Id = z.PropertyId,
