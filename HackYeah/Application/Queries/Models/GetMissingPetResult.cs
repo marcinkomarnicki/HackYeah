@@ -1,11 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using HackYeah.DAL.Models;
 
-namespace HackYeah.DAL.Models;
+namespace HackYeah.Application.Queries.Models;
 
-public class MissingPetReport
+public class GetMissingPetResult
 {
-    [Key] public Guid Id { get; set; }
-    public EncounterType EncounterType { get; set; }
+    public string EncounterTypeName { get; set; }
     public Guid EncounterTypeId { get; set; }
     public string Rase { get; set; }
     public string PetName { get; set; }
