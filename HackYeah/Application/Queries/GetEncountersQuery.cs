@@ -30,9 +30,9 @@ namespace HackYeah.Application.Queries
             var minTime = timeNow.AddHours(-3);
 
             var dataFromDb = _dbContext.Encounters
-                .Where(e => e.EncounterType.Code == request.EncounterType &&
+                .Where(e => 
+                            (string.IsNullOrWhiteSpace(request.EncounterType) || e.EncounterType.Code == request.EncounterType) &&
                             e.TimeUtc > minTime &&
-                            e.IsWild == request.IsWild &&
                             e.Latitude < request.MaxLatitude &&
                             e.Latitude > request.MinLatitude &&
                             e.Longitude < request.MaxLongitude &&
@@ -40,13 +40,14 @@ namespace HackYeah.Application.Queries
                 .Include(encounter => encounter.EncounterType)
                 .Include(encounter => encounter.EncounterProperties)
                 .ThenInclude(propType => propType.EncounterTypeProperty)
+                .Where(p => p.EncounterType.IsSearchable != request.IsWild)
                 .ToList();
 
             var result = dataFromDb.Select(e => new EncounterResult()
             {
                 Latitude = e.Latitude,
                 Longitude = e.Longitude,
-                IsWild = e.IsWild,
+                IsWild = !e.EncounterType.IsSearchable,
                 EncounterType = e.EncounterType.Code,
                 TimeUtc = e.TimeUtc,
                 PropabilityOfOccurance = (int)((timeNow - e.TimeUtc).TotalMinutes / 180) * 100,

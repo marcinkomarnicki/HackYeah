@@ -31,12 +31,12 @@ namespace HackYeah.Application.Queries
                 .Where(e => e.EncounterType.Code == request.EncounterType &&
                             e.TimeUtc > request.StartDate &&
                             e.TimeUtc < request.EndDate &&
-                            e.IsWild == true &&
                             e.Latitude < request.MaxLatitude &&
                             e.Latitude > request.MinLatitude &&
                             e.Longitude < request.MaxLongitude &&
                             e.Longitude > request.MinLongitude)
                 .Include(encounter => encounter.EncounterType)
+                .Where(p => p.EncounterType.IsSearchable == false)
                 .ToList();
 
             var count = dataFromDb.Count;
