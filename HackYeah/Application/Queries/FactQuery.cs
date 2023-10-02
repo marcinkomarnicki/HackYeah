@@ -20,7 +20,7 @@ namespace HackYeah.Application.Queries
         {
             OpenAIClient openAiClient = new OpenAIClient("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");
 
-            var response = await openAiClient.GetCompletionsAsync("text-davinci-003", $"Napisz mi bardzo krotka ciekawostke o zwierzeciu {request.AnimalType}");
+            var response = await openAiClient.GetCompletionsAsync("text-davinci-003", $"Napisz mi po polsku bardzo krotka ciekawostke o zwierzeciu {request.AnimalType}");
 
             var result = response.Value.Choices.First();
 
